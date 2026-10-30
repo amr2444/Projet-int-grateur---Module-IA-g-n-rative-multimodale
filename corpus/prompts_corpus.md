@@ -3,7 +3,7 @@
 **Équipe :** ELBELLAOUI-ELYOUNESSI (Amr EL BELLAOUI, Soulaimane ELYOUNESSI)
 **Outil :** Claude Opus 5.5 (Anthropic), utilisé en mode agent (l'assistant écrit et exécute des scripts Python)
 **Date :** 30 octobre 2026
-**Voie retenue :** génération de documents synthétiques (voie 2 des consignes). Aucun document public n'a été téléchargé : l'environnement de l'assistant n'avait pas accès aux sites des fabricants, et nous avons préféré un corpus entièrement maîtrisé, sans question de licence.
+**Voie retenue :** génération de documents synthétiques (voie 2 des consignes). Aucun document public n'a été téléchargé :  nous avons préféré un corpus entièrement maîtrisé, sans question de licence , et dans la synthèse des documents en génération nous avons fais le suivie de chaque document en lui guidant à ce qu'il a à faire.
 
 ## Méthode
 
