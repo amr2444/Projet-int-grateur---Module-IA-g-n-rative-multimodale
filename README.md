@@ -13,8 +13,8 @@ MaintiDoc aide les techniciens de maintenance à répondre à des questions tech
 ├── README.md
 ├── .gitignore
 ├── docs/
-│   ├── diagrammes/            sources des diagrammes (Mermaid)
-│   ├── rapport/               sections du rapport du livrable 1 (Markdown)
+│   ├── diagrammes/            sources Mermaid (architecture, flux, planning) + images ; rendu : mmdc -i x.mmd -o x.png -c mermaid_config.json
+│   ├── rapport/               sections du rapport du livrable 1 (Markdown) + rapport PDF
 │   └── journal_verification_corpus.md
 ├── corpus/
 │   ├── inventaire.csv         registre des 42 documents
@@ -26,8 +26,8 @@ MaintiDoc aide les techniciens de maintenance à répondre à des questions tech
 ```
 
 ## Avancement
-- [x] Livrable 1 : cadrage, corpus, architecture, flux et accès (en cours : risques, planning)
-- [ ] Livrable 2 : dépôt documenté et ingestion
+- [x] Livrable 1 : cadrage, corpus (42 documents), architecture, flux et accès, risques, planning. Rapport : `docs/rapport/L1_MaintiDoc_ELBELLAOUI-ELYOUNESSI_Rapport.pdf`
+- [ ] Livrable 2 : dépôt documenté et ingestion (semaine 2)
 - [ ] Livrables 3 à 6
 
 Aucun secret (clé d'API, mot de passe) ne doit être commité : utiliser un fichier `.env` (ignoré par Git).

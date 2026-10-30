@@ -23,19 +23,7 @@ Le texte extrait des documents est conservé **comme une donnée**. Il n'est jam
 
 > **Figure 4.2 – Flux d'une requête avec photo jusqu'à la réponse sourcée** (source : `docs/diagrammes/flux_requete.mmd`)
 
-Les étapes numérotées du diagramme suivent le parcours décrit en 3.4. Ce qui circule à chaque frontière :
-
-| De → vers | Données transmises | Contrôle |
-|---|---|---|
-| Interface → API | Question, photo (taille limitée), jeton de session | — |
-| API → Orchestrateur | Question, photo, `user_id`, liste des groupes | **PC1** : les groupes viennent de PostgreSQL, jamais de la requête du client |
-| Orchestrateur → VLM | Photo et question (analyse), puis extraits, figures et historique (rédaction) | Budget : 6 appels maximum |
-| Orchestrateur → Recherche | Texte de recherche, image, **filtre `groupes_acces` ∩ groupes de l'utilisateur** | **PC2** : filtre appliqué dans la requête Qdrant |
-| Recherche → Orchestrateur | Top-k éléments avec `document_id`, `version`, `page`, `element_id`, score | Seuls les éléments autorisés existent dans le résultat |
-| Orchestrateur → MCP | `equipment_id` + identité | **PC6** : le serveur revérifie les droits ; 3 appels maximum |
-| Orchestrateur → Vérification | Réponse brouillon + liste des éléments réellement récupérés | **PC4** |
-| API → Interface | JSON validé : `status`, `answer`, `citations`, `uncertainties`, `clarification_question`, `proposed_action` | — |
-| Interface → API → MinIO | Ouverture d'une page citée | **PC3** : droits revérifiés |
+Les étapes numérotées du diagramme suivent le parcours décrit en 3.4. Les données échangées à chaque frontière, avec le contrôle associé, sont détaillées en annexe E.
 
 ## 4.3 Flux de création de ticket
 
@@ -73,26 +61,7 @@ Ainsi, même si le modèle tentait de créer un ticket de sa propre initiative, 
 | `texte` | texte | contenu du passage ou légende | Affichage, reranking, vérification |
 | `index_version` | texte | `idx-2026-11-v1` | Traçabilité (MLflow) |
 
-**Exemple (payload Qdrant) :**
-```json
-{
-  "element_id": "manuel_pompe_cp50#p9#tableau_8_1",
-  "document_id": "manuel_pompe_cp50",
-  "version": "v2.1 (2025-03)",
-  "page": 9,
-  "type_element": "tableau",
-  "numero_element": "Tableau 8.1",
-  "famille_equipement": "pompes",
-  "equipement_id": ["POMPE-A-01", "POMPE-A-02"],
-  "groupes_acces": ["techniciens_pompes", "responsables"],
-  "langue": "fr",
-  "source_texte": "natif",
-  "confiance_ocr": null,
-  "usage_test": "normal",
-  "uri_fichier": "minio://corpus/documents/famille_1/manuel_pompe_cp50.pdf",
-  "index_version": "idx-2026-11-v1"
-}
-```
+Un exemple complet de métadonnées (payload Qdrant du tableau 8.1 du manuel CP-50) est donné en annexe D.
 
 ## 4.5 Modèle d'accès
 
