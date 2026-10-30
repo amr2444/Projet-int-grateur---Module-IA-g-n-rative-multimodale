@@ -1,0 +1,51 @@
+%% Architecture cible MaintiDoc – livrable 1 (équipe ELBELLAOUI-ELYOUNESSI)
+%% Les points de contrôle PC1 à PC7 sont indiqués dans les blocs où ils s'appliquent.
+flowchart TB
+    U(["Technicien / Responsable"])
+    UI["<b>1. Interface web</b> – Streamlit<br/>question, photo, réponse sourcée<br/>👤 <b>PC5</b> écran d'approbation du ticket"]
+    API["<b>2. API</b> – FastAPI<br/>🔒 <b>PC1</b> authentification + groupes<br/>🔒 <b>PC3</b> ouverture des pages/images si autorisé<br/>quotas, journalisation"]
+    ORC["<b>3. Orchestrateur</b> – LangGraph<br/>état, enchaînement des étapes, budgets<br/>🛡 <b>PC7</b> documents = données, outils en liste blanche<br/>⏸ interruption pour validation humaine"]
+    VLM["<b>4. Modèle vision-langage</b><br/>Qwen2.5-VL-7B 4 bits (repli 3B)<br/>analyse photo + rédaction"]
+    RAG["<b>5. Recherche documentaire</b><br/>texte (BGE-M3) + image (type CLIP)<br/>fusion RRF + reranker<br/>🔒 <b>PC2</b> filtre groupes AVANT recherche"]
+    VER["<b>6. Vérification</b><br/>✅ <b>PC4</b> citations existantes,<br/>autorisées et pertinentes<br/>schéma de sortie Pydantic"]
+    MCPC["<b>7a. Client MCP</b>"]
+    MCPS["<b>7b. Serveur MCP maintenance</b><br/>get_equipment_history · get_open_tickets<br/>create_ticket<br/>🔒 <b>PC6</b> droits + jeton d'approbation + idempotence"]
+    ING["<b>8. Ingestion</b> (hors ligne)<br/>PyMuPDF + OCR, découpage,<br/>embeddings texte et image"]
+    QD[("Qdrant<br/>vecteurs + métadonnées")]
+    PG[("PostgreSQL<br/>utilisateurs, groupes,<br/>métadonnées, approbations, journaux")]
+    MI[("MinIO<br/>PDF, pages, images")]
+    GM[("Base GMAO démo<br/>historiques, tickets")]
+    MLF["<b>9. Suivi</b> – MLflow<br/>versions, métriques"]
+    CORP[/"Corpus<br/>42 documents"/]
+
+    U -->|"question + photo"| UI
+    UI -->|"requête + jeton de session"| API
+    API -->|"requête + identité + groupes"| ORC
+    ORC -->|"photo, question, extraits"| VLM
+    VLM -->|"description, réponse brouillon"| ORC
+    ORC -->|"requête + groupes autorisés"| RAG
+    RAG -->|"passages et figures autorisés"| ORC
+    ORC -->|"réponse + citations"| VER
+    VER -->|"OK / à corriger / clarifier"| ORC
+    ORC -->|"equipment_id, ticket approuvé"| MCPC
+    MCPC -->|"appel d'outil + identité"| MCPS
+    MCPS -->|"historique, n° ticket"| MCPC
+    MCPC --> ORC
+    ORC -->|"JSON : réponse / clarification / brouillon"| API
+    API -->|"réponse + liens sources"| UI
+    RAG <--> QD
+    API <--> PG
+    API --> MI
+    MCPS <--> GM
+    CORP --> ING
+    ING --> QD
+    ING --> MI
+    ING --> PG
+    ORC -.->|"traces"| MLF
+
+    classDef store fill:#eef2f7,stroke:#123a6b
+    classDef main fill:#ffffff,stroke:#123a6b,stroke-width:2px
+    classDef ext fill:#fff7e6,stroke:#b07800
+    class QD,PG,MI,GM store
+    class UI,API,ORC,VLM,RAG,VER main
+    class MCPC,MCPS ext

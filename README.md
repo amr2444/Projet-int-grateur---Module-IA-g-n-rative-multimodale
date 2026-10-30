@@ -26,7 +26,8 @@ MaintiDoc aide les techniciens de maintenance à répondre à des questions tech
 ```
 
 ## Avancement
-- [x] Livrable 1 : cadrage, corpus (en cours : architecture, flux, risques, planning)
+- [x] Livrable 1 : cadrage, corpus, architecture (en cours : flux, risques, planning)
 - [ ] Livrable 2 : dépôt documenté et ingestion
 - [ ] Livrables 3 à 6
 
+Aucun secret (clé d'API, mot de passe) ne doit être commité : utiliser un fichier `.env` (ignoré par Git).
