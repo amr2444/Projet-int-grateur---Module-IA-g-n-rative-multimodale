@@ -1,0 +1,22 @@
+# Secrets : jamais dans le dépôt
+.env
+.env.*
+*.key
+*.pem
+secrets/
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+# Fichiers générés
+tools/generation_corpus/build/
+# Modèles et données lourdes
+models/
+*.safetensors
+*.bin
+# Système
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

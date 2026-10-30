@@ -1,0 +1,6 @@
+reportlab
+matplotlib
+pillow
+numpy
+pypdf
+# + poppler-utils (pdftoppm, pdftotext) installé sur le système

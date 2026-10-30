@@ -1,0 +1,10 @@
+# Journal de vérification du corpus (erreurs détectées et corrigées)
+
+| # | Document(s) | Problème détecté | Comment | Correction |
+|---|---|---|---|---|
+| E01 | proc_vidange_cp50_v1 (et figure garniture partagée) | Le schéma de la garniture, réutilisé dans la procédure v1, indiquait « couple 35 N·m » alors que le texte de la v1 indique 25 N·m : contradiction interne au document, non voulue (seule la contradiction v1/v2 est voulue). | Relecture visuelle de la page 2 du scan | Valeur de couple retirée du schéma (seul « 4 vis M10 » reste) ; le couple n'est donné que dans le texte |
+| E02 | historique_pompe_a_01, historique_pompe_b_01 | Tableau trop étroit : identifiants INT-AAAA-NNNN coupés sur deux lignes, ce qui gênerait l'extraction et la citation des identifiants | Relecture visuelle | Police réduite pour les tableaux de plus de 7 colonnes, largeurs ajustées |
+| E03 | rapport_audit_air_comprime | Le graphique était titré « consommation local LC1 » alors que ses valeurs (144 300 kWh) incluaient COMP-B-02, installé dans l'atelier ; incohérence entre figure et tableau A.1 | Contrôle arithmétique : somme des 9 mois = somme du tableau A.1 (3 compresseurs) | Titre de figure et texte corrigés (« 3 compresseurs, LC1 + atelier », dont 136 500 kWh pour LC1) |
+| E04 | photo_panneau_comp_a01 | Première version : le reflet ne masquait pas le code « A-12 », la photo n'était donc pas ambiguë, contrairement à son rôle de test (usage_test = ambigu) | Contrôle visuel de la photo générée | Reflet repositionné sur le code ; seule la mesure « REF 103°C » reste lisible |
+| E05 | photos de panneaux (voyants orange) | Le voyant « orange » allumé apparaissait jaune (éclaircissement trop fort), ce qui aurait faussé la question « que signifie ce voyant orange ? » | Contrôle visuel | Éclaircissement réduit, teinte orange conservée |
+| E06 | codes_alarme_pompes, schema_pid_station_sp1 | Identifiants abrégés « POMPE-A-01/A-02 » : « A-02 » isolé ressemble à un code d'alarme compresseur (série A-xx), risque de confusion pour la recherche | Contrôle automatique check.py (codes cités ∉ référentiel) | Identifiants écrits en entier (POMPE-A-01 et POMPE-A-02) |
