@@ -1,0 +1,19 @@
+%% Flux d'ingestion MaintiDoc (hors ligne)
+flowchart LR
+    A[/"inventaire.csv<br/>métadonnées + groupes d'accès"/] --> C
+    B[/"Fichier du corpus<br/>PDF texte, PDF scanné, photo"/] --> C{"Type de fichier ?"}
+    C -->|"PDF texte"| D["Extraction PyMuPDF<br/>texte + position par page<br/>tableaux, images de figures"]
+    C -->|"PDF scanné<br/>(pas de couche texte)"| E["Rendu des pages en images<br/>+ OCR local (fra)<br/>texte + boîtes + confiance"]
+    C -->|"Photo"| F["Image conservée telle quelle<br/>+ description courte"]
+    D --> G["Découpage en éléments<br/>passage · tableau · figure · page"]
+    E --> G
+    F --> G
+    G --> H["Rattachement des métadonnées<br/>document_id, version, page, element_id,<br/>equipement_id, famille, groupes_acces, usage_test"]
+    H --> I["Embeddings texte<br/>BGE-M3"]
+    H --> J["Embeddings image<br/>encodeur type CLIP"]
+    I --> K[("Qdrant<br/>vecteur + payload métadonnées")]
+    J --> K
+    H --> L[("PostgreSQL<br/>registre des éléments")]
+    B -.->|"original"| M[("MinIO<br/>PDF, images de pages, figures")]
+    G -.->|"images de pages et figures"| M
+    H --> N["Contrôle : chaque élément a<br/>document_id, page, groupes_acces<br/>sinon rejet + journal"]

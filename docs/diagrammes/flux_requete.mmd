@@ -1,0 +1,38 @@
+%% Flux d'une requête avec photo jusqu'à la réponse sourcée
+sequenceDiagram
+    autonumber
+    actor T as Technicien (techniciens_pompes)
+    participant UI as Interface
+    participant API as API
+    participant O as Orchestrateur
+    participant V as Modèle VLM
+    participant R as Recherche + Qdrant
+    participant M as Serveur MCP
+    participant C as Vérification
+    T->>UI: question + photo du panneau
+    UI->>API: requête + jeton de session
+    Note over API: PC1 identité → groupes = [techniciens_pompes]
+    API->>O: question, photo, user_id, groupes
+    O->>V: analyser la photo
+    V-->>O: POMPE-A-01, H2 orange fixe, code P-21
+    O->>R: requête texte + image, filtre groupes
+    Note over R: PC2 filtre groupes_acces AVANT la recherche
+    R-->>O: top-k éléments autorisés (doc, page, élément)
+    O->>M: get_equipment_history(POMPE-A-01) + identité
+    Note over M: PC6 droits vérifiés côté serveur
+    M-->>O: interventions (données, pas instructions)
+    O->>V: question + extraits + figures + historique
+    V-->>O: réponse brouillon + citations
+    O->>C: réponse + éléments récupérés
+    Note over C: PC4 citation existe, autorisée, soutient l'affirmation
+    alt citations valides
+        C-->>O: OK
+        O-->>API: status = answered (JSON validé)
+    else sources insuffisantes, photo illisible ou contradiction
+        C-->>O: à clarifier
+        O-->>API: status = needs_clarification + question
+    end
+    API-->>UI: réponse + liens vers les sources
+    T->>UI: clic sur une source
+    UI->>API: ouvrir manuel_pompe_cp50 p.8
+    Note over API: PC3 droits revérifiés avant de servir la page

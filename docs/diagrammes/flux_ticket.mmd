@@ -1,0 +1,34 @@
+%% Flux de création de ticket avec approbation humaine et idempotence
+sequenceDiagram
+    autonumber
+    actor T as Technicien
+    participant UI as Interface
+    participant API as API
+    participant O as Orchestrateur (LangGraph)
+    participant M as Serveur MCP
+    participant DB as GMAO démo
+    O->>O: préparer le brouillon (equipment_id, titre, description, sources)
+    O->>API: brouillon + empreinte SHA-256 du contenu
+    Note over O: le graphe se met en pause (interrupt)
+    API->>UI: afficher le contenu EXACT du ticket
+    alt l'utilisateur modifie le texte
+        UI->>API: contenu modifié
+        API->>UI: nouvelle empreinte → nouvelle approbation exigée
+    end
+    T->>UI: « J'approuve »
+    UI->>API: approbation (user_id, empreinte)
+    Note over API: PC5 jeton signé = user_id + empreinte + expiration 10 min
+    API->>O: reprise du graphe + approval_token
+    O->>M: create_ticket(equipment_id, title, description,<br/>approval_token, idempotency_key)
+    Note over M: PC6 vérifie droits, signature, expiration,<br/>empreinte = contenu reçu
+    alt clé d'idempotence déjà utilisée
+        M-->>O: ticket existant (aucun doublon)
+    else première demande valide
+        M->>DB: insérer le ticket
+        DB-->>M: TCK-2026-xxxx
+        M-->>O: ticket créé
+    else jeton absent, expiré ou contenu modifié
+        M-->>O: refus motivé (aucune création)
+    end
+    O-->>API: résultat
+    API-->>UI: numéro de ticket ou refus

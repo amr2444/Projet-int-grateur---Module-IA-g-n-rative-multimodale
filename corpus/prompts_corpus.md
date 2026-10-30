@@ -1,9 +1,9 @@
 # Prompts utilisés pour constituer le corpus MaintiDoc
 
-**Équipe :** ELBELLAOUI-ELYOUNESSI (Amr EL BELLAOUI, Soulaimane ELYOUNESSI)
-**Outil :** Claude Opus 5.5 (Anthropic), utilisé en mode agent (l'assistant écrit et exécute des scripts Python)
-**Date :** 30 octobre 2026
-**Voie retenue :** génération de documents synthétiques (voie 2 des consignes). Aucun document public n'a été téléchargé : nous avons préféré un corpus entièrement maîtrisé, sans question de licence , et dans la synthèse des documents en génération nous avons assuré le suivi de chaque document en déterminant les actions à mener pour chacun d'eux.
+- **Équipe :** ELBELLAOUI-ELYOUNESSI (Amr EL BELLAOUI, Soulaimane ELYOUNESSI)
+- **Outil :** Claude Opus 5.5 (Anthropic), utilisé en mode agent (l'assistant écrit et exécute des scripts Python)
+- **Date :** 30 octobre 2026
+- **Voie retenue :** génération de documents synthétiques (voie 2 des consignes). Aucun document public n'a été téléchargé : nous avons préféré un corpus entièrement maîtrisé, sans question de licence. Pendant la génération, nous avons assuré le suivi de chaque document en déterminant les actions à mener pour chacun d'eux.
 
 ## Méthode
 

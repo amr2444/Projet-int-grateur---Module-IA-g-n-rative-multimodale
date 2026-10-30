@@ -26,7 +26,7 @@ MaintiDoc aide les techniciens de maintenance à répondre à des questions tech
 ```
 
 ## Avancement
-- [x] Livrable 1 : cadrage, corpus, architecture (en cours : flux, risques, planning)
+- [x] Livrable 1 : cadrage, corpus, architecture, flux et accès (en cours : risques, planning)
 - [ ] Livrable 2 : dépôt documenté et ingestion
 - [ ] Livrables 3 à 6
 
